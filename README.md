@@ -14,7 +14,9 @@ Navigate into project
 python -m venv venv
 ```
 
-_note: If this is the first time setup, initialize your python virtual environment_
+Initialize your python virtual environment
+
+_note: This is only necessary for new environment setups_
 
 ```shell
 source venv/bin/activate
