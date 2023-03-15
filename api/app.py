@@ -1,27 +1,26 @@
 from flask import Flask, request, Response
-from db import init_db, create_tags, read_tags, create_reviewers, read_reviewers
-from bson.json_util import dumps
+import db as store
 
 app = Flask(__name__)
 
-db = init_db()
+db = store.init_db()
 
 @app.route('/tags', methods=['GET', 'POST'])
 def tags():
     if request.method == 'GET':
-        obj = read_tags(db)
-        return obj
+        res = store.read_tags(db)
+        return res
     if request.method == 'POST':
         body = request.get_json()
-        create_tags(db, body)
-        return "Created", 201
+        res = store.create_tag(db, body)
+        return res
 
-@app.route('/reviewers', methods=['GET','POST'])
-def reviewers():
+@app.route('/tags/<int:tag_id>', methods=['GET', 'DELETE'])
+def tags_by_id(tag_id):
     if request.method == 'GET':
-        obj = read_reviewers(db)
-        return obj
-    if request.method == 'POST':
-        body = request.get_json()
-        create_reviewers(db, body)
-        return "Created", 201
+        res = store.read_tag_by_id(db,tag_id)
+        return res
+    if request.method == 'DELETE':
+        res = store.delete_tag_by_id(db, tag_id)
+        return res
+        
