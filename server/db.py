@@ -6,10 +6,11 @@ import os
 
 load_dotenv()
 MONGO_URI = os.environ['MONGO_URI']
+DB_NAME = os.environ['DB_NAME']
 
 def init_db():
     client = MongoClient(MONGO_URI)
-    db = client.test
+    db = client.DB_NAME
     
     #create tags and reviewers collections if they do not already exist
     db.tags
@@ -29,8 +30,7 @@ def create_tag(db, data):
     try:
         db.tags.insert_one(data)
     except errors.DuplicateKeyError:
-        duplicate_response = "Resource Already Exists"
-        return (duplicate_response, 400)
+        return ({"Error":"Resource Already Exists"}, 400)
     return ("Created", 201)
 
 def read_tags(db):
