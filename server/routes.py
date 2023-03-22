@@ -1,27 +1,30 @@
 from flask import Flask, request, Response
-import db
+import database
 
+# instantiate flask server
 app = Flask(__name__)
 
-#connect to the database
-conn = db.init_db()
+# connect to the database
+conn = database.initialize_database()
 
+# tags routes the /tags endpoint
 @app.route('/tags', methods=['GET', 'POST'])
 def tags():
     if request.method == 'GET':
-        res = db.read_tags(conn)
-        return res
+        get_tags_response = database.read_tags(conn)
+        return get_tags_response
     if request.method == 'POST':
         body = request.get_json()
-        res = db.create_tag(conn, body)
-        return res
-
+        post_tags_response = database.create_tag(conn, body)
+        return post_tags_response
+    
+# tag_by_id routes the /tags/:id endpoint
 @app.route('/tags/<int:tag_id>', methods=['GET', 'DELETE'])
-def tags_by_id(tag_id):
+def tag_by_id(tag_id):
     if request.method == 'GET':
-        res = db.read_tag_by_id(conn,tag_id)
-        return res
+        get_tag_response = database.read_tag_by_id(conn,tag_id)
+        return get_tag_response
     if request.method == 'DELETE':
-        res = db.delete_tag_by_id(conn, tag_id)
-        return res
+        delete_tag_response = database.delete_tag_by_id(conn, tag_id)
+        return delete_tag_response
         
