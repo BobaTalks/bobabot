@@ -11,9 +11,14 @@ DATABASE_NAME = os.environ["DATABASE_NAME"]
 
 def initialize_database():
     client = MongoClient(MONGO_URI)
-    database = client.DATABASE_NAME
+    try:
+        client.tags.command('ping')
+    except errors.ConnectionFailure:
+        print('Server not available')
 
-    # create tags and reviewers collections if they do not already exist
+    database = client.DATABASE_NAME
+    
+    #create tags collection if it does not already exist
     database.tags
 
     database.tags.create_index("snowflake_id", unique=True)
@@ -24,7 +29,6 @@ def initialize_database():
     #     tag_name: 'Software Engineering', #the name(maybe abbreviation) of the tag
     #     subscribers: [4367482348, 4372894729] #array of ids subscribed to tag
     # }
-
     return database
 
 
@@ -62,3 +66,15 @@ def delete_tag_by_id(db, id):
     if mongo_string == "null":
         return ({"Error": "Resource Does Not Exist"}, 404)
     return ("Delete Successful", 200)
+
+# create_subscriber inserts a subscriber id into the database for the tag with the given tag id 
+def create_subscriber(db, tag_id, subscriber_id):
+    db.tags.find_one_and_update(
+        {'snowflake_id': tag_id},
+        {'$addToSet': {
+            'subscribers': subscriber_id
+            }
+        }
+    )
+    return ({'Success': 'Resource Created'}, 201)
+
