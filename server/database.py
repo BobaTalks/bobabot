@@ -69,12 +69,22 @@ def delete_tag_by_id(db, id):
 
 # create_subscriber inserts a subscriber id into the database for the tag with the given tag id 
 def create_subscriber(db, tag_id, subscriber_id):
-    db.tags.find_one_and_update(
+    query_results = db.tags.update_one(
         {'snowflake_id': tag_id},
         {'$addToSet': {
             'subscribers': subscriber_id
             }
         }
     )
+    #the query results when the id already exists within the array 
+    if query_results.modified_count == 0:
+        return({'Success': 'Resource Already Exists'}, 200)
     return ({'Success': 'Resource Created'}, 201)
 
+# read_subscribers retrieves the array of subscribers from the tag object with the given tag id
+def read_subscribers(db, tag_id):
+    mongo_string = dumps(db.tags.find_one({'snowflake_id': tag_id})['subscribers'])
+    if mongo_string == "null":
+        return ({"Error": "Resource Does Not Exist"}, 404)
+    payload = json.loads(mongo_string)
+    return (payload,200)

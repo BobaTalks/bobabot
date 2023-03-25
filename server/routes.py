@@ -30,8 +30,11 @@ def tag_by_id(tag_id):
         return delete_tag_response
 
 # subscribers routes the /tags/:id/subscribers endpoint
-@app.route('/tags/<int:tag_id>/subscribers', methods=['POST'])
+@app.route('/tags/<int:tag_id>/subscribers', methods=['GET','POST'])
 def subscribers(tag_id):
+    if request.method == 'GET':
+        get_subscribers_response = database.read_subscribers(conn, tag_id)
+        return get_subscribers_response
     if request.method == 'POST':
         body = request.get_json()
         subscriber_id = body['subscriber_id']
