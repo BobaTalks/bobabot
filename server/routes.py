@@ -7,6 +7,7 @@ app = Flask(__name__)
 # connect to the database
 conn = database.initialize_database()
 
+
 # tags routes the /tags endpoint
 @app.route("/tags", methods=["GET", "POST"])
 def tags():
