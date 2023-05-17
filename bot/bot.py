@@ -6,7 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+server_name = os.environ["DISCORD_SERVER_NAME"]
+channel_name = os.environ["DISCORD_CHANNEL_NAME"]
+
 token = os.environ["DISCORD_TOKEN"]
+
 intents = Intents.default()
 intents.message_content=True
 bot = commands.Bot(command_prefix="?", intents=intents)
@@ -28,13 +32,13 @@ def create_message_string(iter_tags):
 
 @bot.event
 async def on_ready():
-    forum_tags = get_forum_tags(bot, "BOT TESTING", "test-forum")
+    forum_tags = get_forum_tags(bot, server_name, channel_name)
     print(f"{bot.user} is online")
     print(f"Available tags: {forum_tags}")
 
 @bot.command()
 async def list_tags(ctx):
-    forum_tags = get_forum_tags(bot, "BOT TESTING", "test-forum")
+    forum_tags = get_forum_tags(bot, server_name, channel_name)
     message_string = create_message_string(forum_tags)
     await ctx.send(f"The available tags are {message_string}")
 
@@ -45,7 +49,7 @@ async def mention_me(ctx):
 
 @bot.event
 async def on_thread_create(ctx):
-    channel_tags = get_thread_tags(ctx, "test-forum")
+    channel_tags = get_thread_tags(ctx, channel_name)
     message_string = create_message_string(channel_tags)
     await ctx.send(f"The applied tags are: {message_string}")
     
