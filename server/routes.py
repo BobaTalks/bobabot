@@ -7,6 +7,7 @@ app = Flask(__name__)
 # connect to the database
 conn = database.initialize_database()
 
+
 # tags routes the /tags endpoint
 @app.route("/tags", methods=["GET", "POST"])
 def tags():
@@ -29,14 +30,17 @@ def tag_by_id(tag_id):
         delete_tag_response = database.delete_tag_by_id(conn, tag_id)
         return delete_tag_response
 
+
 # subscribers routes the /tags/:id/subscribers endpoint
-@app.route('/tags/<int:tag_id>/subscribers', methods=['GET','POST'])
+@app.route("/tags/<int:tag_id>/subscribers", methods=["GET", "POST"])
 def subscribers(tag_id):
-    if request.method == 'GET':
+    if request.method == "GET":
         get_subscribers_response = database.read_subscribers(conn, tag_id)
         return get_subscribers_response
-    if request.method == 'POST':
+    if request.method == "POST":
         body = request.get_json()
-        subscriber_id = body['subscriber_id']
-        create_subscriber_response = database.create_subscriber(conn, tag_id, subscriber_id)
+        subscriber_id = body["subscriber_id"]
+        create_subscriber_response = database.create_subscriber(
+            conn, tag_id, subscriber_id
+        )
         return create_subscriber_response
