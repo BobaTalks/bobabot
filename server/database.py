@@ -12,13 +12,13 @@ DATABASE_NAME = os.environ["DATABASE_NAME"]
 def initialize_database():
     client = MongoClient(MONGO_URI)
     try:
-        client.tags.command('ping')
+        client.tags.command("ping")
     except errors.ConnectionFailure:
-        print('Server not available')
+        print("Server not available")
 
     database = client.DATABASE_NAME
-    
-    #create tags collection if it does not already exist
+
+    # create tags collection if it does not already exist
     database.tags
 
     database.tags.create_index("snowflake_id", unique=True)
@@ -67,24 +67,22 @@ def delete_tag_by_id(db, id):
         return ({"Error": "Resource Does Not Exist"}, 404)
     return ("Delete Successful", 200)
 
-# create_subscriber inserts a subscriber id into the database for the tag with the given tag id 
+
+# create_subscriber inserts a subscriber id into the database for the tag with the given tag id
 def create_subscriber(db, tag_id, subscriber_id):
     query_results = db.tags.update_one(
-        {'snowflake_id': tag_id},
-        {'$addToSet': {
-            'subscribers': subscriber_id
-            }
-        }
+        {"snowflake_id": tag_id}, {"$addToSet": {"subscribers": subscriber_id}}
     )
-    #the query results when the id already exists within the array 
+    # the query results when the id already exists within the array
     if query_results.modified_count == 0:
-        return({'Success': 'Resource Already Exists'}, 200)
-    return ({'Success': 'Resource Created'}, 201)
+        return ({"Success": "Resource Already Exists"}, 200)
+    return ({"Success": "Resource Created"}, 201)
+
 
 # read_subscribers retrieves the array of subscribers from the tag object with the given tag id
 def read_subscribers(db, tag_id):
-    mongo_string = dumps(db.tags.find_one({'snowflake_id': tag_id})['subscribers'])
+    mongo_string = dumps(db.tags.find_one({"snowflake_id": tag_id})["subscribers"])
     if mongo_string == "null":
         return ({"Error": "Resource Does Not Exist"}, 404)
     payload = json.loads(mongo_string)
-    return (payload,200)
+    return (payload, 200)
