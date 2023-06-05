@@ -44,7 +44,7 @@ class Menu(Select):
         Parameters
         ----------
         interaction: discord.Interaction
-            The action implemented by the user that needs to be notified. 
+            The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
         selected_values = self.values
