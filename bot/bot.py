@@ -80,7 +80,7 @@ async def list_tags(interaction):
     Parameters
     ----------
     interaction: discord.Interaction
-        The action implemented by the user that needs to be notified. 
+        The action implemented by the user that needs to be notified.
         In the context of the bot, the action is a slash command
     """
     forum_tags = get_forum_tags(bot, server_name, channel_name)
@@ -96,7 +96,7 @@ async def mention_me(interaction):
     Parameters
     ----------
     interaction: discord.Interaction
-        The action implemented by the user that needs to be notified. 
+        The action implemented by the user that needs to be notified.
         In the context of the bot, the action is a slash command
     """
     caller = interaction.user.id
@@ -111,7 +111,7 @@ async def opt_in(interaction):
     Parameters
     ----------
     interaction: discord.Interaction
-        The action implemented by the user that needs to be notified. 
+        The action implemented by the user that needs to be notified.
         In the context of the bot, the action is a slash command
     """
     forum_tags = get_forum_tags(bot, server_name, channel_name)
