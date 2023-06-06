@@ -16,7 +16,7 @@ def initialize_database():
     except errors.ConnectionFailure:
         print("Server not available")
 
-    database = client.DATABASE_NAME
+    database = client[f"{DATABASE_NAME}"]
 
     # create tags collection if it does not already exist
     database.tags
