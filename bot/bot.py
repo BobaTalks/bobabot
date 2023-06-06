@@ -5,6 +5,7 @@ from discord.ext import commands
 from discord.utils import get
 from dotenv import load_dotenv
 from menu import MenuView
+from client_requests import sync_all_tags
 
 load_dotenv()
 
@@ -137,6 +138,18 @@ async def on_thread_create(ctx):
 
 @bot.command()
 async def sync(interaction):
+    """
+    Syncs the bot tree commands if any changes have been made. Additionally
+    syncs the forum tags with the database.
+
+    Parameters
+    ----------
+    interaction: discord.Interaction
+        The action implemented by the user that needs to be notified.
+        In the context of the bot, the action is a slash command
+    """
+    forum_tags = get_forum_tags(bot, server_name, channel_name)
+    sync_all_tags(forum_tags)
     await bot.tree.sync()
 
 
