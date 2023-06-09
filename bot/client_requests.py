@@ -5,10 +5,13 @@ make requests to the server
 import os
 import requests
 from dotenv import load_dotenv
+from exceptions import EnvironmentVariableNotFoundError
 
 load_dotenv()
-
-server_url = os.environ["SERVER_URL"]
+try:
+    server_url = os.environ["SERVER_URL"]
+except KeyError as e:
+    raise EnvironmentVariableNotFoundError(e.args[0])
 
 
 def sync_all_tags(forum_tags):
@@ -28,3 +31,4 @@ def sync_all_tags(forum_tags):
         tag_dict["name"] = tag.name
         tag_dict["subscribers"] = []
         requests.post(f"{server_url}/tags", json=tag_dict)
+        requests.Response
