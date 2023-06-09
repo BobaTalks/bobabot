@@ -31,4 +31,3 @@ def sync_all_tags(forum_tags):
         tag_dict["name"] = tag.name
         tag_dict["subscribers"] = []
         requests.post(f"{server_url}/tags", json=tag_dict)
-        requests.Response
