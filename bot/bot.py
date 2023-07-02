@@ -104,8 +104,8 @@ async def mention_me(interaction):
     await interaction.response.send_message(f"Hello <@{caller}>, here is your mention")
 
 
-@bot.tree.command(name="opt_in")
-async def opt_in(interaction):
+@bot.tree.command(name="subscribe")
+async def subscribe(interaction):
     """
     Presents a selectable menu of tags for reviewers to subscribe to.
 
