@@ -1,5 +1,6 @@
 from discord import Interaction
 from discord.ui import Select, View
+from client_requests import add_subscriber
 
 
 class Menu(Select):
@@ -37,7 +38,7 @@ class Menu(Select):
             The tags owned by the Forum channel
         """
         for tag in tags:
-            self.add_option(label=tag.name, emoji=tag.emoji)
+            self.add_option(label=tag.name, emoji=tag.emoji, value=tag.id)
 
     async def callback(self, interaction: Interaction):
         """
@@ -47,9 +48,11 @@ class Menu(Select):
             The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
-        selected_values = self.values
+        for value in self.values:
+            add_subscriber(interaction.user.id, value)
+
         await interaction.response.send_message(
-            f"Thank you for selecting {selected_values}", ephemeral=True
+            f"Thank you for selecting {self.values}", ephemeral=True
         )
 
 
