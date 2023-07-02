@@ -32,6 +32,7 @@ def sync_all_tags(forum_tags):
         tag_dict["subscribers"] = []
         requests.post(f"{server_url}/tags", json=tag_dict)
 
+
 def add_subscriber(user_id, tag_id):
     """
     Makes a post request to the server's /tags/<:id>/subscribers endpoint
@@ -47,4 +48,4 @@ def add_subscriber(user_id, tag_id):
     """
 
     payload = {"subscriber_id": user_id}
-    requests.post(f"{server_url}/tags/{tag_id}/subscribers", json = payload)
+    requests.post(f"{server_url}/tags/{tag_id}/subscribers", json=payload)
