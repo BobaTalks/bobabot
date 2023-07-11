@@ -1,6 +1,7 @@
 import os
 from discord import Intents, app_commands, Interaction, Message, Embed
 from discord.ui import Select, View
+from utils import create_mention_string
 from discord.ext import commands
 from discord.utils import get
 from dotenv import load_dotenv
@@ -124,7 +125,7 @@ async def subscribe(interaction):
 @bot.event
 async def on_thread_create(ctx):
     """
-    On creation of a thread, sends a message listing all of the applied tags.
+    On creation of a thread, gets the thread's applied tags and creates a mention message to the appropriate subscribers.
 
     Parameters
     ----------
@@ -132,7 +133,7 @@ async def on_thread_create(ctx):
         An object that represents the context in which the discord command is invoked
     """
     channel_tags = get_thread_tags(ctx, channel_name)
-    message_string = create_message_string(channel_tags)
+    message_string = create_mention_string(channel_tags) 
     await ctx.send(f"The applied tags are: {message_string}")
 
 
