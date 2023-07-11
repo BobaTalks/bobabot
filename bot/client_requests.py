@@ -49,3 +49,15 @@ def add_subscriber(user_id, tag_id):
 
     payload = {"subscriber_id": user_id}
     requests.post(f"{server_url}/tags/{tag_id}/subscribers", json=payload)
+
+def get_subscribers_by_tag(tag_id):
+    """
+    Gets the subscriber ids for the given tag id
+
+    Parameters
+    ----------
+    tag_id : str
+        The id of an applied forum tag
+    """
+    r = requests.get(f"{server_url}/tags/{tag_id}/subscribers")
+    return r.json()
