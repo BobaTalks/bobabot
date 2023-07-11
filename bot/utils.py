@@ -1,5 +1,6 @@
 from client_requests import get_subscribers_by_tag
 
+
 def create_mention_string(tag_ids):
     """
     Accepts tag ids and creates a string to mention all respective subscribers.

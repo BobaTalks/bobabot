@@ -133,7 +133,7 @@ async def on_thread_create(ctx):
         An object that represents the context in which the discord command is invoked
     """
     channel_tags = get_thread_tags(ctx, channel_name)
-    message_string = create_mention_string(channel_tags) 
+    message_string = create_mention_string(channel_tags)
     await ctx.send(f"The applied tags are: {message_string}")
 
 
