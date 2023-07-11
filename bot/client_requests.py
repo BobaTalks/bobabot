@@ -50,6 +50,7 @@ def add_subscriber(user_id, tag_id):
     payload = {"subscriber_id": user_id}
     requests.post(f"{server_url}/tags/{tag_id}/subscribers", json=payload)
 
+
 def get_subscribers_by_tag(tag_id):
     """
     Gets the subscriber ids for the given tag id
