@@ -150,9 +150,10 @@ async def unsubscribe(interaction):
     # Need to fetch all tags the user is subscribed to currently
     # IDK wtf this is doing so far
     forum_tags = fetch_subscriptions(interaction.user.id)
-    view = MenuView()
-    view.remove_menu(forum_tags)
-    await interaction.response.send_message(view=view, ephemeral=True)
+    # view = MenuView()
+    # view.remove_menu(forum_tags)
+    # await interaction.response.send_message(view=view, ephemeral=True)
+    await interaction.response.send_message(forum_tags, ephemeral=True)
 
 
 @bot.event

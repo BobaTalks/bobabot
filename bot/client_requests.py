@@ -4,6 +4,7 @@ make requests to the server
 """
 import os
 import requests
+from bson.json_util import dumps
 from dotenv import load_dotenv
 from exceptions import EnvironmentVariableNotFoundError
 
@@ -50,6 +51,22 @@ def add_subscriber(user_id, tag_id):
     payload = {"subscriber_id": user_id}
     requests.post(f"{server_url}/tags/{tag_id}/subscribers", json=payload)
 
+
+def remove_subscriber(user_id, tag_id):
+    """
+    Makes a delete request to the server's /tags/<:id>/subscribers endpoint
+    removing the given user id if present
+
+    Parameters
+    ----------
+    user_id : int
+        An integer representing the corresponding user id
+
+    tag_id : str
+        The id of the tag being subscribed to by the respective user
+    """
+    requests.delete(f"{server_url}/tags/{tag_id}/subscribers/{user_id}")
+
     
 def fetch_subscriptions(user_id):
     """
@@ -61,10 +78,14 @@ def fetch_subscriptions(user_id):
     user_id : int
         An integer representing the corresponding user id
     """
-    response = requests.get(f"{server_url}/tags/subscribers", params={"subscriber_id": user_id})
+    response = requests.get(f"{server_url}/tags")
     if response.status_code == 200:
-        return response.json()
+        filtered_tags = []
+        for tag in response.json():
+            if user_id in tag["subscribers"]:
+                filtered_tags.append(tag["name"])
+        return filtered_tags
     else:
         print(f"Error fetching subscribed tags: {response.text}")
         return None
-    
+

@@ -78,7 +78,6 @@ def create_subscriber(db, tag_id, subscriber_id):
         return ({"Success": "Resource Already Exists"}, 200)
     return ({"Success": "Resource Created"}, 201)
 
-# MIGHT REMOVE
 # (IP) remove_subscriber removes a subscriber from a selected tag id in a database
 def remove_subscriber_from_tag(db, tag_id, subscriber_id):
     query_results = db.tags.update_one(
@@ -87,18 +86,6 @@ def remove_subscriber_from_tag(db, tag_id, subscriber_id):
     if query_results.modified_count == 0:
         return ({"Error": "Subscriber Does Not Exist"}, 404)
     return ({"Success": "Delete Successful"}, 200)
-
-# read_subscribed_tags returns all the tags that a user is subscribed to given a subscriber_id
-def read_subscribed_tags(db, subscriber_id):
-    query_results = []
-    tags = db.tags.find()
-    for tag in tags:
-        if subscriber_id in tag.get('subscribers', []):
-            query_results.append(tag)
-    mongo_string = dumps(query_results)
-    if mongo_string:
-        return ({"Success": "Successfully Returned Subscribed Tags"}, 200)
-    return ({"Error: Subscriber Does Not Exist"}, 404)
     
 
 # read_subscribers retrieves the array of subscribers from the tag object with the given tag id
