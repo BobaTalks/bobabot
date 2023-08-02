@@ -5,7 +5,7 @@ from discord.ext import commands
 from discord.utils import get
 from dotenv import load_dotenv
 from menu import MenuView
-from client_requests import sync_all_tags
+from client_requests import sync_all_tags, fetch_subscriptions
 
 load_dotenv()
 
@@ -68,6 +68,20 @@ def create_message_string(iter_tags):
     return ", ".join(tags)
 
 
+@bot.command()
+async def boba(ctx):
+    """
+    Creates a boba-ascii art and outputs to respective channel
+
+    Parameters
+    ----------
+    ctx : Discord Context
+        Includes information on who executed the command (namely channel)
+    """
+    ascii_art = '\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣴⣶⣶⣦⣤⣤⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠉⣉⠉⠉⠹⣿⠀⠀⠀⠀⠀⠈⠉⠉⣉⠉⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⢿⡇⠀⠀⠉⠀⠀⠀⠀⠀⠀⠀⢸⡿⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⡆⠘⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣷⠀⢻⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⡄⠸⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣧⠀⢿⣿⣿⡟⢻⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡿⣿⠉⢻⡀⢸⡏⢉⡗⢺⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣄⣼⠛⢻⣇⣀⡟⢉⣷⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣧⣼⣷⣾⣅⣹⣿⣿⣤⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n'
+    await ctx.send(ascii_art)
+
+
 @bot.event
 async def on_ready():
     print(f"{bot.user} is online")
@@ -118,6 +132,26 @@ async def subscribe(interaction):
     forum_tags = get_forum_tags(bot, server_name, channel_name)
     view = MenuView()
     view.add_menu(forum_tags)
+    await interaction.response.send_message(view=view, ephemeral=True)
+
+
+# W.I.P.
+@bot.tree.command(name="unsubscribe")
+async def unsubscribe(interaction):
+    """
+    Present a selectable menu of tags for reviewers to unsubscribe from.
+
+    Parameters:
+    -----------
+    interaction: discord.Interaction
+        The action implemented by the user that needs to be notified.
+        In the context of the bot, the action is a slash command
+    """
+    # Need to fetch all tags the user is subscribed to currently
+    # IDK wtf this is doing so far
+    forum_tags = fetch_subscriptions(interaction.user.id)
+    view = MenuView()
+    view.remove_menu(forum_tags)
     await interaction.response.send_message(view=view, ephemeral=True)
 
 

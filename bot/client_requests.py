@@ -49,3 +49,22 @@ def add_subscriber(user_id, tag_id):
 
     payload = {"subscriber_id": user_id}
     requests.post(f"{server_url}/tags/{tag_id}/subscribers", json=payload)
+
+    
+def fetch_subscriptions(user_id):
+    """
+    Makes a get request to the server's /tags/<:id>/subscribers endpoint
+    fetching the tag if the given user id is present
+
+    Parameters
+    ----------
+    user_id : int
+        An integer representing the corresponding user id
+    """
+    response = requests.get(f"{server_url}/tags/subscribers", params={"subscriber_id": user_id})
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Error fetching subscribed tags: {response.text}")
+        return None
+    

@@ -55,7 +55,6 @@ class Menu(Select):
             f"Thank you for selecting {self.values}", ephemeral=True
         )
 
-
 class MenuView(View):
     """
     A class used to represent a select menu's view in discord. This is
@@ -81,4 +80,17 @@ class MenuView(View):
         menu = Menu(tags)
         menu.add_items(tags)
         # Adds a menu to the view object that can be displayed in discord
+        self.add_item(menu)
+
+    def remove_menu(self, tags):
+        """
+        Parameters
+        ----------
+        tags : Sequence[ForumTag]
+            The tags that the user is currently subscribed to
+        """
+
+        menu = Menu(tags)
+        menu.add_items(tags)
+        # Adds a menu to the view object (in Discord)
         self.add_item(menu)
