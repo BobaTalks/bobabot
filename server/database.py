@@ -79,6 +79,16 @@ def create_subscriber(db, tag_id, subscriber_id):
     return ({"Success": "Resource Created"}, 201)
 
 
+# (IP) remove_subscriber removes a subscriber from a selected tag id in a database
+def remove_subscriber_from_tag(db, tag_id, subscriber_id):
+    query_results = db.tags.update_one(
+        {"snowflake_id": tag_id}, {"$pull": {"subscribers": subscriber_id}}
+    )
+    if query_results.modified_count == 0:
+        return ({"Error": "Subscriber Does Not Exist"}, 404)
+    return ({"Success": "Delete Successful"}, 200)
+
+
 # read_subscribers retrieves the array of subscribers from the tag object with the given tag id
 def read_subscribers(db, tag_id):
     mongo_string = dumps(db.tags.find_one({"snowflake_id": tag_id})["subscribers"])
