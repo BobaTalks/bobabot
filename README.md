@@ -38,7 +38,7 @@ Enter server settings
 
 Under Community, register your server as a community server
 
-Add a new forum text channel, make the name match your .env variable *DISCORD_CHANNEL_NAME* 
+Add a new forum text channel, make the name match your .env variable *DISCORD_CHANNEL_NAME*
 
 Under the settings for this new channel, add a couple tags. These represent different fields/roles.
 
@@ -61,7 +61,7 @@ Invite your bot to your server with the following set of permissions:
     <li> Use Slash Commands
 </div>
 
-_NOTE_: Generate a new token under the *bot* tab and keep it, it will be used later in the .env file 
+_NOTE_: Generate a new token under the *bot* tab and keep it, it will be used later in the .env file
 
 
 ### Docker & MongoDB
@@ -132,7 +132,7 @@ cd bobabot/bot
 
 From here, run the bot
 
-```shell 
+```shell
 python main.py
 ```
 

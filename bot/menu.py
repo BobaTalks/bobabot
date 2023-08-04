@@ -1,6 +1,6 @@
 from discord import Interaction
 from discord.ui import Select, View
-from client_requests import add_subscriber
+from client_requests import add_subscriber, remove_subscriber
 
 
 class Menu(Select):
@@ -18,13 +18,14 @@ class Menu(Select):
         sends back a response message
     """
 
-    def __init__(self, tags):
+    def __init__(self, tags, sub_toggle):
         """
         Parameters
         ----------
         tags : Sequence[ForumTag]
             The tags owned by the Forum channel
         """
+        self.sub_toggle = sub_toggle
         max_values = len(tags)
         super().__init__(
             placeholder="The currently available tags", max_values=max_values
@@ -48,12 +49,17 @@ class Menu(Select):
             The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
-        for value in self.values:
-            add_subscriber(interaction.user.id, value)
+        if self.sub_toggle:
+            for value in self.values:
+                add_subscriber(interaction.user.id, value)
+        else:
+            for value in self.values:
+                remove_subscriber(interaction.user.id, value)
 
         await interaction.response.send_message(
             f"Thank you for selecting {self.values}", ephemeral=True
         )
+
 
 class MenuView(View):
     """
@@ -65,9 +71,12 @@ class MenuView(View):
     -------
     add_menu(tags)
         Adds the Menu object to the view
+    sub_toggle : int
+        1 or 0 to specify subscribe/unsubscribe callback
     """
 
-    def __init(self):
+    def __init__(self, sub_toggle):
+        self.sub_toggle = sub_toggle
         super().__init__()
 
     def add_menu(self, tags):
@@ -77,20 +86,7 @@ class MenuView(View):
         tags : Sequence[ForumTag]
             The tags owned by the Forum channel
         """
-        menu = Menu(tags)
+        menu = Menu(tags, self.sub_toggle)
         menu.add_items(tags)
         # Adds a menu to the view object that can be displayed in discord
-        self.add_item(menu)
-
-    def remove_menu(self, tags):
-        """
-        Parameters
-        ----------
-        tags : Sequence[ForumTag]
-            The tags that the user is currently subscribed to
-        """
-
-        menu = Menu(tags)
-        menu.add_items(tags)
-        # Adds a menu to the view object (in Discord)
         self.add_item(menu)

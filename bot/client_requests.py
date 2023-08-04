@@ -67,11 +67,11 @@ def remove_subscriber(user_id, tag_id):
     """
     requests.delete(f"{server_url}/tags/{tag_id}/subscribers/{user_id}")
 
-    
+
 def fetch_subscriptions(user_id):
     """
-    Makes a get request to the server's /tags/<:id>/subscribers endpoint
-    fetching the tag if the given user id is present
+    Makes a get request to the server's /tags endpoint
+    fetching the tags in which the user id is present
 
     Parameters
     ----------
@@ -88,4 +88,3 @@ def fetch_subscriptions(user_id):
     else:
         print(f"Error fetching subscribed tags: {response.text}")
         return None
-

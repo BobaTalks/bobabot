@@ -44,7 +44,7 @@ def subscribers(tag_id):
             conn, tag_id, subscriber_id
         )
         return create_subscriber_response
-    
+
 
 @app.route("/tags/<int:tag_id>/subscribers/<int:user_id>", methods=["DELETE"])
 def subscribers_by_id(user_id, tag_id):
@@ -53,4 +53,3 @@ def subscribers_by_id(user_id, tag_id):
             conn, tag_id, user_id
         )
         return remove_subscriber_response
-
