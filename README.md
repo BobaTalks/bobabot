@@ -52,7 +52,7 @@ Additionally, register for a discord developer account and create a new bot appl
 Invite your bot to your server with the following set of permissions:
 
 <div style="padding-bottom: 20px;">
-    <li> Manage Server
+    - Manage Server
     <li> Manage Channels
     <li> Send Messages
     <li> Create Public Threads

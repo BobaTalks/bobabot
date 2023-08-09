@@ -68,7 +68,7 @@ def remove_subscriber(user_id, tag_id):
     requests.delete(f"{server_url}/tags/{tag_id}/subscribers/{user_id}")
 
 
-def fetch_subscriptions(user_id):
+def fetch_subscriptions_by_user_id(user_id):
     """
     Makes a get request to the server's /tags endpoint
     fetching the tags in which the user id is present
