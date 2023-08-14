@@ -73,13 +73,12 @@ def create_subscriber(db, tag_id, subscriber_id):
     query_results = db.tags.update_one(
         {"snowflake_id": tag_id}, {"$addToSet": {"subscribers": subscriber_id}}
     )
-    # the query results when the id already exists within the array
     if query_results.modified_count == 0:
         return ({"Success": "Resource Already Exists"}, 200)
     return ({"Success": "Resource Created"}, 201)
 
 
-# (IP) remove_subscriber removes a subscriber from a selected tag id in a database
+# remove_subscriber removes a subscriber from a selected tag id in a database
 def remove_subscriber_from_tag(db, tag_id, subscriber_id):
     query_results = db.tags.update_one(
         {"snowflake_id": tag_id}, {"$pull": {"subscribers": subscriber_id}}

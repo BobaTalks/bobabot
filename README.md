@@ -90,21 +90,9 @@ This should return a list of active containers, and under port you will find lis
 
 Next, we need to configure our .env file to ensure we connect to the correct container when running our local development server.
 
-Within your repository, create a file named ".env" with the following
+Within your repository, create a file named ".env".
 
-```shell
-# Port should match your container
-MONGO_URI='mongodb://localhost:27017/'
-# Database name is your container name
-DATABASE_NAME='bobabot'
-# To create a token, register on discord for developers. Create a new application, and see under the bot tab. Copy paste your token here.
-DISCORD_TOKEN='abCd214sampleToken'
-# Set to the name of your testing discord
-DISCORD_SERVER_NAME='sample_server_name'
-# Set to the name of your testing community "forum" channel
-DISCORD_CHANNEL_NAME='resumes'
-SERVER_URL='http://localhost:5000'
-```
+From there copy the contents of sample.env into .env, fill in your own unique token and server, and remove the comments. 
 
 ### Running Your Test Environment
 
