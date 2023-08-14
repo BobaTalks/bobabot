@@ -51,15 +51,13 @@ Additionally, register for a discord developer account and create a new bot appl
 
 Invite your bot to your server with the following set of permissions:
 
-<div style="padding-bottom: 20px;">
-    - Manage Server
-    <li> Manage Channels
-    <li> Send Messages
-    <li> Create Public Threads
-    <li> Manage Messages
-    <li> Embed Links
-    <li> Use Slash Commands
-</div>
+- Manage Server
+- Manage Channels
+- Send Messages
+- Create Public Threads
+- Manage Messages
+- Embed Links
+- Use Slash Commands
 
 _NOTE_: Generate a new token under the *bot* tab and keep it, it will be used later in the .env file
 
