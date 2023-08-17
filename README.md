@@ -92,7 +92,7 @@ Next, we need to configure our .env file to ensure we connect to the correct con
 
 Within your repository, create a file named ".env".
 
-From there copy the contents of sample.env into .env, fill in your own unique token and server, and remove the comments. 
+From there copy the contents of sample.env into .env, fill in your own unique token and server, and remove the comments.
 
 ### Running Your Test Environment
 
