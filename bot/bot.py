@@ -6,7 +6,7 @@ from discord.ext import commands
 from discord.utils import get
 from dotenv import load_dotenv
 from menu import MenuView
-from client_requests import sync_all_tags
+from client_requests import sync_all_tags, fetch_subscriptions_by_user_id
 
 load_dotenv()
 
@@ -117,7 +117,27 @@ async def subscribe(interaction):
         In the context of the bot, the action is a slash command
     """
     forum_tags = get_forum_tags(bot, server_name, channel_name)
-    view = MenuView()
+    view = MenuView(True)
+    view.add_menu(forum_tags)
+    await interaction.response.send_message(view=view, ephemeral=True)
+
+
+@bot.tree.command(name="unsubscribe")
+async def unsubscribe(interaction):
+    """
+    Present a selectable menu of tags for reviewers to unsubscribe from.
+
+    Parameters:
+    -----------
+    interaction: discord.Interaction
+        The action implemented by the user that needs to be notified.
+        In the context of the bot, the action is a slash command
+    """
+    forum_tags = get_forum_tags(bot, server_name, channel_name)
+    subscribed_tags = fetch_subscriptions_by_user_id(interaction.user.id)
+    # Filtering from forum_tags to retain important channel information (for Menu)
+    forum_tags = [tag for tag in forum_tags if tag.name in subscribed_tags]
+    view = MenuView(False)
     view.add_menu(forum_tags)
     await interaction.response.send_message(view=view, ephemeral=True)
 

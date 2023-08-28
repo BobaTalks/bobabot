@@ -1,6 +1,6 @@
 from discord import Interaction
 from discord.ui import Select, View
-from client_requests import add_subscriber
+from client_requests import add_subscriber, remove_subscriber
 
 
 class Menu(Select):
@@ -18,13 +18,14 @@ class Menu(Select):
         sends back a response message
     """
 
-    def __init__(self, tags):
+    def __init__(self, tags, is_adding_subscriber):
         """
         Parameters
         ----------
         tags : Sequence[ForumTag]
             The tags owned by the Forum channel
         """
+        self.is_adding_subscriber = is_adding_subscriber
         max_values = len(tags)
         super().__init__(
             placeholder="The currently available tags", max_values=max_values
@@ -48,8 +49,12 @@ class Menu(Select):
             The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
-        for value in self.values:
-            add_subscriber(interaction.user.id, value)
+        if self.is_adding_subscriber:
+            for value in self.values:
+                add_subscriber(interaction.user.id, value)
+        else:
+            for value in self.values:
+                remove_subscriber(interaction.user.id, value)
 
         await interaction.response.send_message(
             f"Thank you for selecting {self.values}", ephemeral=True
@@ -66,9 +71,12 @@ class MenuView(View):
     -------
     add_menu(tags)
         Adds the Menu object to the view
+    is_adding_subscriber : int
+        1 or 0 to specify subscribe/unsubscribe callback
     """
 
-    def __init(self):
+    def __init__(self, is_adding_subscriber):
+        self.is_adding_subscriber = is_adding_subscriber
         super().__init__()
 
     def add_menu(self, tags):
@@ -78,7 +86,7 @@ class MenuView(View):
         tags : Sequence[ForumTag]
             The tags owned by the Forum channel
         """
-        menu = Menu(tags)
+        menu = Menu(tags, self.is_adding_subscriber)
         menu.add_items(tags)
         # Adds a menu to the view object that can be displayed in discord
         self.add_item(menu)
