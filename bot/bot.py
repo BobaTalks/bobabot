@@ -1,6 +1,7 @@
 import os
 from discord import Intents, app_commands, Interaction, Message, Embed
 from discord.ui import Select, View
+from utils import create_mention_string
 from discord.ext import commands
 from discord.utils import get
 from dotenv import load_dotenv
@@ -123,8 +124,10 @@ async def subscribe(interaction):
     subscribed_tags = fetch_subscriptions_by_user_id(interaction.user.id)
     forum_tags = [tag for tag in forum_tags if not tag.name in subscribed_tags]
     view = MenuView(True)
-    if (forum_tags == []): 
-        await interaction.response.send_message(f"You are currently subscribed to all tags!")
+    if forum_tags == []:
+        await interaction.response.send_message(
+            f"You are currently subscribed to all tags!"
+        )
     else:
         view.add_menu(forum_tags)
         await interaction.response.send_message(view=view, ephemeral=True)
@@ -149,8 +152,10 @@ async def unsubscribe(interaction):
     # Filtering from forum_tags to retain important channel information (for Menu)
     forum_tags = [tag for tag in forum_tags if tag.name in subscribed_tags]
     view = MenuView(False)
-    if (forum_tags == []): 
-        await interaction.response.send_message(f"Not currently subscribed to any tags!")
+    if forum_tags == []:
+        await interaction.response.send_message(
+            f"Not currently subscribed to any tags!"
+        )
     else:
         view.add_menu(forum_tags)
         await interaction.response.send_message(view=view, ephemeral=True)
