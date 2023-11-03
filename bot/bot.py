@@ -135,8 +135,8 @@ async def unsubscribe(interaction):
     """
     Present a selectable menu of tags for reviewers to unsubscribe from.
 
-    In the event that there are tags to subscribe to,
-    the user is notified through a message
+    In the event that there are tags to unsubscribe from (e.g the user has no subscriptions),
+    a message is sent to the user indicating that they are not subscribed to any tags.
 
     Parameters:
     -----------
