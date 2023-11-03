@@ -49,16 +49,15 @@ class Menu(Select):
             The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
+        await interaction.response.send_message(
+            f"Thank you for selecting {self.values}", ephemeral=True
+        )
         if self.is_adding_subscriber:
             for value in self.values:
                 add_subscriber(interaction.user.id, value)
         else:
             for value in self.values:
                 remove_subscriber(interaction.user.id, value)
-
-        await interaction.response.send_message(
-            f"Thank you for selecting {self.values}", ephemeral=True
-        )
 
 
 class MenuView(View):
@@ -71,8 +70,8 @@ class MenuView(View):
     -------
     add_menu(tags)
         Adds the Menu object to the view
-    is_adding_subscriber : int
-        1 or 0 to specify subscribe/unsubscribe callback
+    is_adding_subscriber : boolean
+        True, False to specify subscribe/unsubscribe callback
     """
 
     def __init__(self, is_adding_subscriber):
