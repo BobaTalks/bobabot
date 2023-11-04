@@ -110,6 +110,9 @@ async def subscribe(interaction):
     """
     Presents a selectable menu of tags for reviewers to subscribe to.
 
+    In the event that all tags are subscribed to (e.g the user has no tags to subscribe to),
+    a message is sent to the user indicating that they are subscribed to all tags.
+
     Parameters
     ----------
     interaction: discord.Interaction
@@ -117,15 +120,26 @@ async def subscribe(interaction):
         In the context of the bot, the action is a slash command
     """
     forum_tags = get_forum_tags(bot, server_name, channel_name)
+    # Using the users current subscriptions, we can filter tags they haven't subscribed to
+    subscribed_tags = fetch_subscriptions_by_user_id(interaction.user.id)
+    forum_tags = [tag for tag in forum_tags if not tag.name in subscribed_tags]
     view = MenuView(True)
-    view.add_menu(forum_tags)
-    await interaction.response.send_message(view=view, ephemeral=True)
+    if forum_tags == []:
+        await interaction.response.send_message(
+            f"You are currently subscribed to all tags!"
+        )
+    else:
+        view.add_menu(forum_tags)
+        await interaction.response.send_message(view=view, ephemeral=True)
 
 
 @bot.tree.command(name="unsubscribe")
 async def unsubscribe(interaction):
     """
     Present a selectable menu of tags for reviewers to unsubscribe from.
+
+    In the event that there are tags to unsubscribe from (e.g the user has no subscriptions),
+    a message is sent to the user indicating that they are not subscribed to any tags.
 
     Parameters:
     -----------
@@ -138,8 +152,13 @@ async def unsubscribe(interaction):
     # Filtering from forum_tags to retain important channel information (for Menu)
     forum_tags = [tag for tag in forum_tags if tag.name in subscribed_tags]
     view = MenuView(False)
-    view.add_menu(forum_tags)
-    await interaction.response.send_message(view=view, ephemeral=True)
+    if forum_tags == []:
+        await interaction.response.send_message(
+            f"Not currently subscribed to any tags!"
+        )
+    else:
+        view.add_menu(forum_tags)
+        await interaction.response.send_message(view=view, ephemeral=True)
 
 
 @bot.event
