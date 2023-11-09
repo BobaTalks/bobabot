@@ -56,12 +56,15 @@ class Menu(Select):
             prepend_message_string = "You are now unsubscribed from "
         converted_menu_values = list(map(int, self.values))
         semantic_selected_tags = [
-            (option.emoji.name + option.label)
+            option.emoji.name + " " + option.label if option.emoji else option.label
             for option in self.options
             if option.value in converted_menu_values
         ]
+        for tag in semantic_selected_tags:
+            prepend_message_string += tag + ", "
+        prepend_message_string = prepend_message_string[:-2]
         await interaction.response.send_message(
-            f"{prepend_message_string} {semantic_selected_tags}", ephemeral=True
+            f"{prepend_message_string}", ephemeral=True
         )
         if self.is_adding_subscriber:
             for value in self.values:
