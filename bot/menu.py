@@ -49,23 +49,23 @@ class Menu(Select):
             The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
-        prepend_message_string = ""
+        response_message = ""
         if self.is_adding_subscriber:
-            prepend_message_string = "You are now subscribed to "
+            response_message = "You are now subscribed to "
         else:
-            prepend_message_string = "You are now unsubscribed from "
-        converted_menu_values = list(map(int, self.values))
-        semantic_selected_tags = [
-            option.emoji.name + " " + option.label if option.emoji else option.label
-            for option in self.options
-            if option.value in converted_menu_values
-        ]
-        for tag in semantic_selected_tags:
-            prepend_message_string += tag + ", "
-        prepend_message_string = prepend_message_string[:-2]
-        await interaction.response.send_message(
-            f"{prepend_message_string}", ephemeral=True
-        )
+            response_message = "You are now unsubscribed from "
+        converted_menu_values = set(map(int, self.values))
+        formatted_selected_tags = list()
+        for option in self.options:
+            if option.value in converted_menu_values:
+                if option.emoji:
+                    formatted_selected_tags.append(
+                        option.emoji.name + " " + option.label
+                    )
+                else:
+                    formatted_selected_tags.append(option.label)
+        response_message += ", ".join(formatted_selected_tags)
+        await interaction.response.send_message(f"{response_message}", ephemeral=True)
         if self.is_adding_subscriber:
             for value in self.values:
                 add_subscriber(interaction.user.id, value)
