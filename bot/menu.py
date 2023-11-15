@@ -49,8 +49,19 @@ class Menu(Select):
             The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
+        converted_menu_values = set(map(int, self.values))
+        formatted_selected_tags = list()
+        for option in self.options:
+            if option.value in converted_menu_values:
+                if option.emoji:
+                    formatted_selected_tags.append(
+                        option.emoji.name + " " + option.label
+                    )
+                else:
+                    formatted_selected_tags.append(option.label)
         await interaction.response.send_message(
-            f"Thank you for selecting {self.values}", ephemeral=True
+            f"You are now {'subscribed to' if self.is_adding_subscriber else 'unsubscribed from'} {', '.join(formatted_selected_tags)}",
+            ephemeral=True,
         )
         if self.is_adding_subscriber:
             for value in self.values:
