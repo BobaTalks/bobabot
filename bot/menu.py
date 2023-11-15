@@ -49,11 +49,6 @@ class Menu(Select):
             The action implemented by the user that needs to be notified.
             In the context of the bot, the action is a slash command
         """
-        response_message = ""
-        if self.is_adding_subscriber:
-            response_message = "You are now subscribed to "
-        else:
-            response_message = "You are now unsubscribed from "
         converted_menu_values = set(map(int, self.values))
         formatted_selected_tags = list()
         for option in self.options:
@@ -64,8 +59,10 @@ class Menu(Select):
                     )
                 else:
                     formatted_selected_tags.append(option.label)
-        response_message += ", ".join(formatted_selected_tags)
-        await interaction.response.send_message(f"{response_message}", ephemeral=True)
+        await interaction.response.send_message(
+            f"You are now {'subscribed to' if self.is_adding_subscriber else 'unsubscribed from'} {', '.join(formatted_selected_tags)}",
+            ephemeral=True,
+        )
         if self.is_adding_subscriber:
             for value in self.values:
                 add_subscriber(interaction.user.id, value)
